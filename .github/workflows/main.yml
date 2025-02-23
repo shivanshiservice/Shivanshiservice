@@ -1,24 +1,22 @@
- 
- 	
-name: Windows - LiteManager
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    name: Start Building...
-    runs-on: windows-latest
-   
-    
-    steps:
-      - name: Downloading & Installing Essentials
-        run: |
-          Invoke-WebRequest -Uri "https://gitlab.com/chamod12/lm_win-10_github_rdp/-/raw/main/Downloads.bat" -OutFile "Downloads.bat"
-          cmd /c Downloads.bat
-
-      - name: Connect to LiteManager
-        run: cmd /c show.bat
-
-      - name: Time Counter
-        run: cmd /c loop.bat
+services:
+  windows:
+    image: dockurr/windows
+    container_name: windows
+    environment:
+      VERSION: "10"
+      USERNAME: "MASTER"
+      PASSWORD: "admin@123"
+      RAM_SIZE: "4G"
+      CPU_CORES: "4"
+      DISK_SIZE: "400G"
+      DISK2_SIZE: "100G"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "8006:8006"
+      - "3389:3389/tcp"
+      - "3389:3389/udp"
+    stop_grace_period: 2m
